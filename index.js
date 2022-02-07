@@ -9,7 +9,8 @@ const img2ascii = (path, width, invert = false) => {
     let str = '';
     let image = sharp(path); // Get image from path
     image.metadata().then(data => {
-        height = Math.floor(data.height / 2); // Since ASCII characters are taller than they are wide, set height to be half that of
+	let aspect = data.width / data.height;
+        height = Math.floor(width / aspect / 2); // Calculate height with aspect ratio and given width
     }).then(() => {
         image.sharpen(100).removeAlpha().resize(width, height, { fit: "fill" }).raw().toBuffer().then(val => {
             for (let px = 0; px < width * height; px++) {
@@ -40,4 +41,4 @@ const img2ascii = (path, width, invert = false) => {
     }).catch(err => { console.log(err); throw err; });
 }
 
-img2ascii("input.png", 570, false);
+img2ascii("input.jpg", 50, false);
